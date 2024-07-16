@@ -33,3 +33,15 @@ if __name__ == '__main__':
     with app.app_context():
         db.create_all()
     app.run(debug=True)
+
+@app.route('/add_sample_data')
+def add_sample_data():
+    sample_supplier = Supplier(name='Sample Supplier', performance_score=85.5)
+    db.session.add(sample_supplier)
+    db.session.commit()
+    return jsonify({"message": "Sample data added!"})
+
+@app.route('/suppliers')
+def get_suppliers():
+    suppliers = Supplier.query.all()
+    return jsonify([{"id": s.id, "name": s.name, "performance_score": s.performance_score} for s in suppliers])
